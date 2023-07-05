@@ -21,10 +21,10 @@ return new class extends Migration
             $table->enum('status', ['Pending', 'In progress', 'Completed'])->default('Pending');
             $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('created_by');
-            $table->timestamps();
 
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
