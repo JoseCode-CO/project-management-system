@@ -6,7 +6,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthRepository{
+class AuthRepository
+{
     public function register($request)
     {
         $request->validate([
@@ -19,6 +20,7 @@ class AuthRepository{
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -37,10 +39,12 @@ class AuthRepository{
             $user = User::where('email', $request->email)->first();
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            return response()->json(['token' => $token], 200);
+            if ($user->role === 'admin') {
+                return response()->json(['token' => $token, 'role' => 'admin'], 200);
+            } else {
+                return response()->json(['token' => $token, 'role' => 'user'], 200);
+            }
         }
-
-        return response()->json(['message' => 'Unauthorized'], 401);
     }
 
     public function logout($request)

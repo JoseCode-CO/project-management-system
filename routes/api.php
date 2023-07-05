@@ -18,12 +18,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->middleware('throttle:60,1', 'auth:sanctum')->group(function () {
-    Route::apiResources([
-        'projects' => ProjectController::class,
-        'tasks' => TaskController::class,
-    ]);
 
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::middleware(['checkrole:admin'])->group(function () {
+        // Rutas para el rol de administrador
+        Route::get('projects', [ProjectController::class, 'index']);
+        Route::post('projects', [ProjectController::class, 'store']);
+        Route::get('projects/{project}', [ProjectController::class, 'show']);
+        Route::put('projects/{project}', [ProjectController::class, 'update']);
+        Route::delete('projects/{project}', [ProjectController::class, 'destroy']);
+    });
+
+    Route::middleware(['checkrole:admin,user'])->group(function () {
+        // Rutas para el rol de usuario
+        Route::get('tasks', [TaskController::class, 'index']);
+        Route::post('tasks', [TaskController::class, 'store']);
+        Route::get('tasks/{task}', [TaskController::class, 'show']);
+        Route::put('tasks/{task}', [TaskController::class, 'update']);
+        Route::delete('tasks/{task}', [TaskController::class, 'destroy']);
+    });
+
 });
 
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
