@@ -25,7 +25,7 @@ class TaskRequest extends FormRequest
     {
         return [
             'description' => 'required',
-            'status' => 'sometime|in:Pendiente,En progreso,Completado',
+            'status' => 'sometimes|in:Pendiente,En progreso,Completado',
             'project_id' => 'required|exists:projects,id',
         ];
     }

@@ -23,7 +23,7 @@ class TaskController extends Controller
             return response($tasks, Response::HTTP_OK);
         } catch (\Exception $ex) {
             return  response([
-                "message" => "Algo salio mal al listar los Tareas", "error" => $ex->getMessage(), "line" => $ex->getCode()
+                "message" => "Algo salio mal al listar las Tareas", "error" => $ex->getMessage(), "line" => $ex->getCode()
             ], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -41,7 +41,7 @@ class TaskController extends Controller
             return response($tasks, Response::HTTP_OK);
         } catch (\Exception $ex) {
             return  response([
-                "message" => "Algo salio mal al crear el Tarea", "error" => $ex->getMessage(), "line" => $ex->getCode()
+                "message" => "Algo salio mal al crear la Tarea", "error" => $ex->getMessage(), "line" => $ex->getCode()
             ], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -59,7 +59,7 @@ class TaskController extends Controller
             return response($project, Response::HTTP_OK);
         } catch (\Exception $ex) {
             return  response([
-                "message" => "Algo salio mal al listar el Tarea", "error" => $ex->getMessage(), "line" => $ex->getCode()
+                "message" => "Algo salio mal al listar la Tarea", "error" => $ex->getMessage(), "line" => $ex->getCode()
             ], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -79,7 +79,7 @@ class TaskController extends Controller
             return response($project, Response::HTTP_OK);
         } catch (\Exception $ex) {
             return  response([
-                "message" => "Algo salio mal al listar el Tarea", "error" => $ex->getMessage(), "line" => $ex->getCode()
+                "message" => "Algo salio mal al listar la Tarea", "error" => $ex->getMessage(), "line" => $ex->getCode()
             ], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -97,7 +97,19 @@ class TaskController extends Controller
             return response($project, Response::HTTP_OK);
         } catch (\Exception $ex) {
             return  response([
-                "message" => "Algo salio mal al eliminar el Tarea", "error" => $ex->getMessage(), "line" => $ex->getCode()
+                "message" => "Algo salio mal al eliminar la Tarea", "error" => $ex->getMessage(), "line" => $ex->getCode()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function filters(Request $request)
+    {
+        try {
+            $tasks = $this->taskRepository->filters($request);
+            return response($tasks, Response::HTTP_OK);
+        } catch (\Exception $ex) {
+            return  response([
+                "message" => "Algo salio mal al filtrar la Tarea", "error" => $ex->getMessage(), "line" => $ex->getCode()
             ], Response::HTTP_BAD_REQUEST);
         }
     }

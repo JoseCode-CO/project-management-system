@@ -10,14 +10,34 @@ class ProjectRepository implements ProjectInterface
 {
     public function getAll()
     {
-        return Project::where('created_by', Auth::id())->with('members', 'created_by')->orderByDesc('id')
+        $query = Project::with('members', 'created_by', 'tasks', 'tasks.created_by')
+            ->orderByDesc('id');
+
+        if (Auth::user()->role !== 'admin') {
+            $query->where('created_by', Auth::id());
+        }
+
+        return $query->paginate(20);
+    }
+
+    public function getAllUsers()
+    {
+        return Project::with('members', 'created_by', 'tasks', 'tasks.created_by')
+            ->orderByDesc('id')
             ->paginate(10);
     }
 
     public function findById($id)
     {
-        return Project::where('created_by', Auth::id())->with('members', 'created_by')->findOrFail($id);
+        $project = Project::with('members', 'created_by')->findOrFail($id);
+
+        if (Auth::user()->role === 'admin' || $project->created_by === Auth::id()) {
+            return $project;
+        } else {
+            throw new \Exception("No tienes permiso para acceder a este registro.");
+        }
     }
+
 
     public function create($request)
     {
@@ -34,17 +54,61 @@ class ProjectRepository implements ProjectInterface
 
     public function update($data, $id)
     {
-        $project = Project::where('created_by', Auth::id())->findOrfail($id);
+        $project = Project::findOrFail($id);
 
-        $project->update($data);
-        return $project;
+        if (Auth::user()->role === 'admin' || $project->created_by === Auth::id()) {
+            $project->update($data);
+            return $project;
+        } else {
+            throw new \Exception("No tienes permiso para actualizar este Proyecto.");
+        }
     }
+
 
     public function delete($id)
     {
-        $project = Project::where('created_by', Auth::id())->findOrfail($id);
+        $project = Project::findOrFail($id);
 
-        $project->delete();
-        return $project;
+        if (Auth::user()->role === 'admin' || $project->created_by === Auth::id()) {
+            $project->delete();
+            return $project;
+        } else {
+            throw new \Exception("No tienes permiso para eliminar este Proyecto.");
+        }
+    }
+
+    public function filters($request)
+    {
+        $query = Project::with('members', 'created_by', 'tasks', 'tasks.created_by');
+
+        if (Auth::user()->role === 'admin') {
+        } else {
+
+            $query->where('created_by', Auth::id());
+        }
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('start_date', '=', $request->input('start_date'));
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('end_date', '=', $request->input('end_date'));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('sort_by')) {
+            $sortColumn = $request->input('sort_by');
+
+            if ($sortColumn === 'start_date' || $sortColumn === 'end_date' || $sortColumn === 'status') {
+                $query->orderBy($sortColumn);
+            }
+        }
+
+        $tasks = $query->get();
+
+        return $tasks;
     }
 }

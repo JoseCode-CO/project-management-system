@@ -47,6 +47,5 @@ class User extends Authenticatable
     public function projects()
     {
         return $this->hasMany(Project::class, 'created_by');
-
     }
 }

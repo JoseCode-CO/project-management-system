@@ -29,7 +29,7 @@ class Project extends Model
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class, 'project_members');
+        return $this->hasMany(Task::class);
     }
 
     public function created_by()

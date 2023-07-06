@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -39,7 +40,12 @@ class AuthRepository
             $user = User::where('email', $request->email)->first();
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            return response()->json(['token' => $token, 'role' => $user->role, 'proyectos' =>$user->projects], 200);
+            $project = Project::where('created_by', Auth::id())
+            ->with('members', 'created_by', 'tasks', 'tasks.created_by')
+            ->orderByDesc('id')
+            ->paginate(10);
+
+            return response()->json(['token' => $token, 'role' => $user->role, 'project' =>$project], 200);
         }
     }
 

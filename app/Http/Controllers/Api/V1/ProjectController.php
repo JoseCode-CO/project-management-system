@@ -107,4 +107,28 @@ class ProjectController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
     }
+
+    public function getAllUsers()
+    {
+        try {
+            $projects = $this->projectRepository->getAllUsers();
+            return response($projects, Response::HTTP_OK);
+        } catch (\Exception $ex) {
+            return  response([
+                "message" => "Algo salio mal al listar los Proyectos", "error" => $ex->getMessage(), "line" => $ex->getCode()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function filters(Request $request)
+    {
+        try {
+            $tasks = $this->projectRepository->filters($request);
+            return response($tasks, Response::HTTP_OK);
+        } catch (\Exception $ex) {
+            return  response([
+                "message" => "Algo salio mal al filtrar los Proyectos", "error" => $ex->getMessage(), "line" => $ex->getCode()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
 }

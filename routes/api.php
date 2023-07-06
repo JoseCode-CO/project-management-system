@@ -23,27 +23,31 @@ Route::prefix('v1')->middleware('throttle:60,1', 'auth:sanctum')->group(function
 
 
     Route::middleware(['checkrole:admin'])->group(function () {
-        // Rutas para el rol de administrador
+        Route::get('projects-all', [ProjectController::class, 'getAllUsers']);
+    });
+
+    Route::middleware(['checkrole:admin,user-regular'])->group(function () {
+        // Rutas para el rol de usuario
         Route::get('projects', [ProjectController::class, 'index']);
         Route::post('projects', [ProjectController::class, 'store']);
         Route::get('projects/{project}', [ProjectController::class, 'show']);
         Route::put('projects/{project}', [ProjectController::class, 'update']);
         Route::delete('projects/{project}', [ProjectController::class, 'destroy']);
-    });
+        Route::get('projects-filters', [ProjectController::class, 'filters']);
 
-    Route::middleware(['checkrole:admin,user'])->group(function () {
-        // Rutas para el rol de usuario
         Route::get('tasks', [TaskController::class, 'index']);
         Route::post('tasks', [TaskController::class, 'store']);
         Route::get('tasks/{task}', [TaskController::class, 'show']);
         Route::put('tasks/{task}', [TaskController::class, 'update']);
         Route::delete('tasks/{task}', [TaskController::class, 'destroy']);
+        Route::get('tasks-filters', [TaskController::class, 'filters']);
 
-        Route::get('project_member', [ProjectMemberController::class, 'index']);
+       /* Route::get('project_member', [ProjectMemberController::class, 'index']);
         Route::post('project_member', [ProjectMemberController::class, 'store']);
         Route::get('project_member/{project_member}', [ProjectMemberController::class, 'show']);
         Route::put('project_member/{project_member}', [ProjectMemberController::class, 'update']);
         Route::delete('project_member/{project_member}', [ProjectMemberController::class, 'destroy']);
+        Route::get('project_member/{data}', [ProjectMemberController::class, 'filters']);*/
     });
 
 });
