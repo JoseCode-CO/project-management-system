@@ -8,4 +8,7 @@ interface ProjectInterface{
     public function create($data);
     public function update($data, $id);
     public function delete($id);
+    public function getAllUsers();
+    public function filters($data);
+
 }
