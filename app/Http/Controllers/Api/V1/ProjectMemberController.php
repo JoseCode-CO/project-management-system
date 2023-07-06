@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProjectMember;
+use App\Repositories\ProjectMemberRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -11,7 +12,7 @@ class ProjectMemberController extends Controller
 {
     protected $projectRepository;
 
-    public function __construct(ProjectMember $projectRepository)
+    public function __construct(ProjectMemberRepository $projectRepository)
     {
         $this->projectRepository = $projectRepository;
     }
@@ -68,25 +69,6 @@ class ProjectMemberController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $attributes = $request->validated();
-        try {
-            $project = $this->projectRepository->update($attributes, $id);
-            return response($project, Response::HTTP_OK);
-        } catch (\Exception $ex) {
-            return  response([
-                "message" => "Algo salio mal al listar el Proyecto", "error" => $ex->getMessage(), "line" => $ex->getCode()
-            ], Response::HTTP_BAD_REQUEST);
-        }
-    }
 
     /**
      * Remove the specified resource from storage.

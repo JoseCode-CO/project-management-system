@@ -10,12 +10,13 @@ class ProjectRepository implements ProjectInterface
 {
     public function getAll()
     {
-        return Project::with('members', 'created_by')->get();
+        return Project::where('created_by', Auth::id())->with('members', 'created_by')->orderByDesc('id')
+            ->paginate(10);
     }
 
     public function findById($id)
     {
-        return Project::with('members', 'created_by')->findOrFail($id);
+        return Project::where('created_by', Auth::id())->with('members', 'created_by')->findOrFail($id);
     }
 
     public function create($request)
@@ -33,7 +34,7 @@ class ProjectRepository implements ProjectInterface
 
     public function update($data, $id)
     {
-        $project = Project::findOrfail($id);
+        $project = Project::where('created_by', Auth::id())->findOrfail($id);
 
         $project->update($data);
         return $project;
@@ -41,7 +42,7 @@ class ProjectRepository implements ProjectInterface
 
     public function delete($id)
     {
-        $project = Project::findOrfail($id);
+        $project = Project::where('created_by', Auth::id())->findOrfail($id);
 
         $project->delete();
         return $project;

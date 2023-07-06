@@ -20,4 +20,14 @@ class Task extends Model
     ];
 
     public $timestamps = true;
+
+    public function created_by()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function project_id()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 }

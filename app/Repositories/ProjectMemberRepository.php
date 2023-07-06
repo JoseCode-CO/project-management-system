@@ -4,7 +4,8 @@ namespace App\Repositories;
 
 use App\Models\ProjectMember;
 
-class ProjectMemberRepository{
+class ProjectMemberRepository
+{
 
     public function getAll()
     {
@@ -18,6 +19,14 @@ class ProjectMemberRepository{
 
     public function create($request)
     {
+        $search = ProjectMember::where('project_id', $request->project_id)
+            ->where('user_id', $request->user_id)
+            ->first();
+
+        if ($search) {
+            return "El usuario que intenta agregar a este proyecto ya está agregado";
+        }
+
         $project = ProjectMember::create([
             'project_id' => $request->project_id,
             'user_id' => $request->user_id,
@@ -41,6 +50,4 @@ class ProjectMemberRepository{
         $project->delete();
         return $project;
     }
-
-
 }

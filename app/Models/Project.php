@@ -27,6 +27,11 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'project_members');
     }
 
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'project_members');
+    }
+
     public function created_by()
     {
         return $this->belongsTo(User::class, 'created_by');

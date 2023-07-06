@@ -13,7 +13,7 @@ class TaskRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,19 @@ class TaskRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'description' => 'required',
+            'status' => 'sometime|in:Pendiente,En progreso,Completado',
+            'project_id' => 'required|exists:projects,id',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'status.in' => 'Está enviando un estado invalido, los estados validos son Pendiente,En progreso, y Completado',
+            'description.required' => 'La descripcion es requerida.',
+            'project_id.required' => 'El proyecto es requerido.',
+            'project_id.exists' => 'El proyecto no existe.',
         ];
     }
 }

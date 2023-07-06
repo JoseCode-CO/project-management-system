@@ -10,12 +10,13 @@ class TaskRepository implements TaskInterface{
 
     public function getAll()
     {
-        return Task::all();
+        return Task::where('created_by', Auth::id())->with('project_id', 'created_by')->orderByDesc('id')
+        ->paginate(10);
     }
 
     public function findById($id)
     {
-        return Task::findOrFail($id);
+        return Task::where('created_by', Auth::id())->findOrFail($id);
     }
 
     public function create($request)
@@ -32,7 +33,7 @@ class TaskRepository implements TaskInterface{
 
     public function update($data, $id)
     {
-        $task = Task::findOrfail($id);
+        $task = Task::where('created_by', Auth::id())->findOrfail($id);
 
         $task->update($data);
         return $task;
@@ -40,7 +41,7 @@ class TaskRepository implements TaskInterface{
 
     public function delete($id)
     {
-        $task = Task::findOrfail($id);
+        $task = Task::where('created_by', Auth::id())->findOrfail($id);
 
         $task->delete();
         return $task;

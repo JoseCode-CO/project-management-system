@@ -39,7 +39,7 @@ class AuthRepository
             $user = User::where('email', $request->email)->first();
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            return response()->json(['token' => $token, 'role' => $user->role,], 200);
+            return response()->json(['token' => $token, 'role' => $user->role, 'proyectos' =>$user->projects], 200);
         }
     }
 
