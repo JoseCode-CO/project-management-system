@@ -14,9 +14,7 @@ class TaskRepository implements TaskInterface
         $query = Task::with('project_id', 'created_by')->orderByDesc('id');
 
 
-        if (Auth::user()->role !== 'admin') {
-            $query->where('created_by', Auth::id());
-        }
+        $query->where('created_by', Auth::id());
 
         return $query->paginate(20);
     }
@@ -72,10 +70,7 @@ class TaskRepository implements TaskInterface
     {
         $query = Task::query();
 
-        if (Auth::user()->role === 'admin') {
-
-        } else {
-
+        if (Auth::user()->role !== 'admin') {
             $query->where('created_by', Auth::id());
         }
 

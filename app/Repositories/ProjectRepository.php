@@ -13,9 +13,7 @@ class ProjectRepository implements ProjectInterface
         $query = Project::with('members', 'created_by', 'tasks', 'tasks.created_by')
             ->orderByDesc('id');
 
-        if (Auth::user()->role !== 'admin') {
-            $query->where('created_by', Auth::id());
-        }
+        $query->where('created_by', Auth::id());
 
         return $query->paginate(20);
     }
@@ -81,9 +79,7 @@ class ProjectRepository implements ProjectInterface
     {
         $query = Project::with('members', 'created_by', 'tasks', 'tasks.created_by');
 
-        if (Auth::user()->role === 'admin') {
-        } else {
-
+        if (Auth::user()->role !== 'admin') {
             $query->where('created_by', Auth::id());
         }
 
