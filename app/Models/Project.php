@@ -21,4 +21,14 @@ class Project extends Model
     ];
 
     public $timestamps = true;
+
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'project_members');
+    }
+
+    public function created_by()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

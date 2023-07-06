@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\AuthController;
+use App\Models\ProjectMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,9 +37,16 @@ Route::prefix('v1')->middleware('throttle:60,1', 'auth:sanctum')->group(function
         Route::get('tasks/{task}', [TaskController::class, 'show']);
         Route::put('tasks/{task}', [TaskController::class, 'update']);
         Route::delete('tasks/{task}', [TaskController::class, 'destroy']);
+
+        Route::get('project_member', [ProjectMember::class, 'index']);
+        Route::post('project_member', [ProjectMember::class, 'store']);
+        Route::get('project_member/{project_member}', [ProjectMember::class, 'show']);
+        Route::put('project_member/{project_member}', [ProjectMember::class, 'update']);
+        Route::delete('project_member/{project_member}', [ProjectMember::class, 'destroy']);
     });
 
 });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);

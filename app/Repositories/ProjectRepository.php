@@ -10,12 +10,12 @@ class ProjectRepository implements ProjectInterface
 {
     public function getAll()
     {
-        return Project::all();
+        return Project::with('members', 'created_by')->get();
     }
 
     public function findById($id)
     {
-        return Project::findOrFail($id);
+        return Project::with('members', 'created_by')->findOrFail($id);
     }
 
     public function create($request)

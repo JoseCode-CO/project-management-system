@@ -39,17 +39,15 @@ class AuthRepository
             $user = User::where('email', $request->email)->first();
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            if ($user->role === 'admin') {
-                return response()->json(['token' => $token, 'role' => 'admin'], 200);
-            } else {
-                return response()->json(['token' => $token, 'role' => 'user'], 200);
-            }
+            return response()->json(['token' => $token, 'role' => $user->role,], 200);
         }
     }
 
     public function logout($request)
     {
-        $request->user()->currentAccessToken()->delete();
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+        }
 
         return response()->json(['message' => 'Logged out']);
     }

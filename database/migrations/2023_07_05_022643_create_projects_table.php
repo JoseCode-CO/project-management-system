@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
 
-            $table->string('title');
+            $table->string('title')->unique();
             $table->text('description');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->enum('status', ['Pending', 'In progress', 'Completed'])->default('Pending');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->enum('status', ['Pendiente', 'En progreso', 'Completado'])->default('Pendiente');
 
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');

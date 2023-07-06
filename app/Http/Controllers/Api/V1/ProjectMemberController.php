@@ -3,21 +3,19 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProjectRequest;
-use App\Repositories\ProjectRepository;
+use App\Models\ProjectMember;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class ProjectController extends Controller
+class ProjectMemberController extends Controller
 {
     protected $projectRepository;
 
-    public function __construct(ProjectRepository $projectRepository)
+    public function __construct(ProjectMember $projectRepository)
     {
         $this->projectRepository = $projectRepository;
     }
-
-    /**
+   /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -40,7 +38,7 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProjectRequest $request)
+    public function store(Request $request)
     {
         try {
             $projects = $this->projectRepository->create($request);
