@@ -34,7 +34,14 @@ class AuthController extends Controller
     {
         try {
             $projects = $this->authRepository->login($request);
-            return response($projects, Response::HTTP_OK);
+            return response()->json([
+                'status' => true,
+                'message' => 'User logged in successfully',
+                'data' => [
+                    'projects' => $projects,
+                    'otherData' => 'Otros datos aquí'
+                ]
+            ], Response::HTTP_OK);
         } catch (\Exception $ex) {
             return  response([
                 "message" => "Algo salio mal al Loguearse", "error" => $ex->getMessage(), "line" => $ex->getCode()

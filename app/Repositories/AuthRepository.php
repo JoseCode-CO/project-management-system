@@ -45,7 +45,13 @@ class AuthRepository
             ->orderByDesc('id')
             ->paginate(10);
 
-            return response()->json(['token' => $token, 'role' => $user->role, 'project' =>$project], 200);
+            return response()->json([
+                'status' => true,
+                'message' => 'User logged in successfully',
+                'data' => $user,
+                'token' => $user->createToken('API TOKEN')->plainTextToken
+            ],200);
+
         }
     }
 
